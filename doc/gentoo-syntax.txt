@@ -1,0 +1,271 @@
+*gentoo-syntax.txt*	Gentoo Syntax Plugin
+
+Authors:  Ciaran McCreesh <ciaranm at gentoo dot org>
+          Aaron Walker    <ka0ttic at gentoo dot org>
+          Tom Martin      <slarti  at gentoo dot org>
+          Elfyn McBratney <beu     at gentoo dot org>
+          Mike Kelly      <pioto   at gentoo dot org>
+
+==============================================================================
+1. Contents						       *gentoo-syntax*
+
+    1. Contents                                            |gentoo-syntax|
+
+    2. Plugin Information                         |gentoo-syntax-overview|
+	Detection Specifics                      |gentoo-syntax-detection|
+	Highlighting Specifics                |gentoo-syntax-highlighting|
+	    Common Syntax Rules                     |gentoo-common-syntax|
+	    Ebuild and Eclass Files                 |gentoo-ebuild-syntax|
+	    GLEP Files                                |gentoo-glep-syntax|
+	    ChangeLogs                           |gentoo-changelog-syntax|
+	    conf.d Files                            |gentoo-conf.d-syntax|
+	    cron.d Files                            |gentoo-cron.d-syntax|
+	    env.d Files                              |gentoo-env.d-syntax|
+	    GuideXML Syntax                       |gentoo-guidexml-syntax|
+	    init.d Files                            |gentoo-init.d-syntax|
+	    make.conf Files                      |gentoo-make-conf-syntax|
+	    metadata.xml Files                    |gentoo-metadata-syntax|
+	    package.(un)mask                  |gentoo-package-mask-syntax|
+	    package.keywords              |gentoo-package-keywords-syntax|
+	    package.use                        |gentoo-package-use-syntax|
+	    thirdpartymirrors                      |gentoo-mirrors-syntax|
+	    use.desc, use.local.desc              |gentoo-use-desc-syntax|
+	Settings Specifics                        |gentoo-syntax-settings|
+	Indent Specifics                          |gentoo-indent-settings|
+	Bug Summary                                          |:BugSummary|
+	New conf.d Files                                      |new-conf.d|
+	New Ebuilds                                          |new-ebuilds|
+	New init.d Files                                      |new-init.d|
+	New Metadata                                        |new-metadata|
+
+==============================================================================
+2. Plugin Information				      *gentoo-syntax-overview*
+
+	The gentoo-syntax package provides a collection of syntax, ftdetect,
+	ftplugin and indent files to help Gentoo developers and users work
+	with ebuilds, eclasses, GLEPs, Gentoo style ChangeLogs, init.d /
+	conf.d / env.d / cron.d entries, /etc/portage/ files and so on.
+
+    Detection Specifics				     *gentoo-syntax-detection*
+
+	Ebuilds are detected by an 'ebuild' extension. Eclasses are detected
+	by an 'eclass' extension. Both ebuild and eclass files are assigned
+	the 'ebuild' filetype.
+
+	GLEP files are detected by a 'txt' extension, followed by a check that
+	the first line of the file starts with "GLEP: ". They are assigned the
+	'glep' filetype.
+
+	Gentoo ChangeLogs are detected by the 'ChangeLog' filename and a
+	copyright header on the second line.
+
+	init.d scripts are detected by being in /etc/init.d/ . They are also
+	detected if they are under a files/ directory and include a
+	'#!/sbin/runscript' header.
+
+	conf.d, env.d and cron.d files are detected by being in the relevant
+	subdirectory in /etc.
+
+	package.mask, package.unmask, package.keywords, package.use and
+	thirdpartymirrors files are detected by filename.
+
+	make.conf files are detected by filename (make.globals is also
+	recognised).
+
+	metadata.xml files are detected by filename.
+
+	use.desc files are detected by filename (use.local.desc is also
+	recognised).
+
+    Highlighting Specifics			  *gentoo-syntax-highlighting*
+
+	Syntax highlighting is provided for ebuild/eclass, GLEP files,
+	Gentoo ChangeLogs and init.d / conf.d / env.d / cron.d scripts.
+
+							*gentoo-common-syntax*
+
+	Many of the syntax files are based upon gentoo-common.vim, which
+	provides basic syntax highlighting for header blocks and bug numbers.
+
+							*gentoo-ebuild-syntax*
+
+	The ebuild/eclass syntax file builds upon the vim-provided |sh.vim|
+	and adds in highlighting for:
+	    * ebuild.sh / portage keywords
+	    * functions from commonly used eclasses (eutils, flag-o-matic,
+	      gcc, libtool, fixheadtails, webapp, webapp-apache, versionator,
+	      cvs, fdo-mime, multilib, 64-bit, cron, games, toolchain-funcs,
+	      subversion, alternatives, rpm, python, check-kernel,
+	      perl-module, distutils)
+	    * common mistakes (assigning to read-only variables, misspellings,
+	      leading non-tab spaces, default WORKDIR assignment)
+
+				       *g:ebuild_error_on_trailing_whitespace*
+	Error highlighting for trailing whitespace is available but disabled
+	by default. To turn it on, add:
+>
+	    let g:ebuild_error_on_trailing_whitespace=1
+<
+	to your |vimrc| file.
+
+							  *gentoo-glep-syntax*
+
+	Syntax highlighting for GLEP files is based upon the vim-provided rst
+	syntax file. Additional highlighting is available for the headers at
+	the top of the file and for heading sections.
+
+						     *gentoo-changelog-syntax*
+
+	Syntax highlighting for Gentoo ChangeLogs is implemented from scratch
+	(some rules come from |gentoo-common-syntax|).
+
+							*gentoo-conf.d-syntax*
+
+	Syntax highlighting for conf.d files is based upon the vim-provided
+	|sh.vim|, with additional support for certain Gentooisms (some rules
+	come from |gentoo-common-syntax|).
+
+							*gentoo-cron.d-syntax*
+
+	Syntax highlighting for cron.d entries uses the vim-provided
+	crontab.vim file.
+
+							 *gentoo-env.d-syntax*
+
+	Syntax highlighting for env.d files is based upon the vim-provided
+	|sh.vim|, with additional support for certain Gentooisms (some rules
+	come from |gentoo-common-syntax|).
+
+						      *gentoo-guidexml-syntax*
+
+	Syntax highlighting for guidexml files is based upon the vim-provided
+	|xml.vim|.
+
+							*gentoo-init.d-syntax*
+
+	Syntax highlighting for init.d files is based upon the vim-provided
+	|sh.vim|, with additional support for certain Gentooisms (some rules
+	come from |gentoo-common-syntax|).
+
+						     *gentoo-make-conf-syntax*
+
+	Syntax highlighting for make.conf files is implemented from scratch
+	(some rules come from |gentoo-common-syntax|).
+
+						     *gentoo-metadata-syntax*
+
+	Syntax highlighting for metadata.xml files is based upon the
+	vim-provided |xml.vim|, with additional highlighting for recognised
+	elements.
+
+						  *gentoo-package-mask-syntax*
+
+	Syntax highlighting for package.mask and package.unmask files is
+	implemented from scratch (some rules come from
+	|gentoo-common-syntax|).
+
+					      *gentoo-package-keywords-syntax*
+
+	Syntax highlighting for package.keywords files is implemented from
+	scratch (some rules come from |gentoo-common-syntax|).
+
+						   *gentoo-package-use-syntax*
+
+	Syntax highlighting for package.use files is implemented from scratch
+	(some rules come from |gentoo-common-syntax|).
+
+						       *gentoo-mirrors-syntax*
+
+	Syntax highlighting for thirdpartymirrors files is implemented from
+	scratch (some rules come from |gentoo-common-syntax|).
+
+						      *gentoo-use-desc-syntax*
+	Syntax highlighting for use.desc and use.local.desc is implemented
+	from scratch (some rules come from |gentoo-common-syntax|).
+
+    Settings Specifics				      *gentoo-syntax-settings*
+
+	For ebuilds and eclasses, tabs (|'shiftwidth'| and |'tabstop'|) are
+	set to four spaces, tab to space conversion (|'expandtab'|) is disabled
+	and the text width (|'textwidth'|) is set to 80 columns. To allow
+	proper syntax highlighting for commands like 'strip-flags', the hyphen
+	character is added as a valid keyword character (|'iskeyword'|).
+
+	For ebuilds, eclasses and ChangeLogs, UTF-8 is used for fileencoding
+	as per GLEP 31.
+
+    Indent Specifics				      *gentoo-indent-settings*
+
+	Indent settings for ebuilds and eclasses are the same as for regular
+	bash files.
+
+    Bug Summary							 *:BugSummary*
+
+	To see a summary of a Gentoo bug, execute :BugSummary 12345.
+
+								 *:BugDetails*
+	The :BugDetails 12345 command is similar to :BugSummary, but will also
+	display a menu allowing the user to open the bug in a browser or
+	insert the bug details / number into the active document. In normal
+	mode, a map <Leader>bug (see |<Leader>|) is provided to call this
+	command on the bug number under the cursor.
+
+							*g:bugsummary_browser*
+	Before using the "browser" BugSummary option, you must let the plugin
+	know what browser you want to use. For example: >
+
+	    let g:bugsummary_browser="firefox '%s'"
+<
+	The %s sequence is replaced by the URL to load.
+
+    New conf.d Files				      *new-conf.d* *:NewConfd*
+
+	New conf.d files will automatically have a skeleton content created
+	for them.
+
+	The ':NewConfd' command can be used to manually create contents for a
+	new conf.d file.
+
+	Note: conf.d files may not be detected automatically. The |:NewConfd|
+	command will still work in these situations.
+
+    New Ebuilds					    *new-ebuilds* *:NewEbuild*
+
+	New ebuilds will automatically have content placed into them based
+	upon context (for example, the package category). Similarly, new
+	eclasses are created from a template. If the environment variable
+	'ECHANGELOG_USER' is set, it will be used for the author's name.
+	Otherwise, the 'USER' environment variable will be used.
+
+	The ':NewEbuild' command can be used to manually create contents for a
+	new ebuild or eclass file.
+
+	To disable the autogenerate functionality place into your .vimrc file:
+
+	    let g:ebuild_create_on_empty = 0
+
+    New init.d Files				      *new-init.d* *:NewInitd*
+
+	New init.d files will automatically have a skeleton content created
+	for them.
+
+	The ':NewInitd' command can be used to manually create contents for a
+	new init.d file.
+
+	Note: init.d files may not be detected automatically. The |:NewInitd|
+	command will still work in these situations.
+
+    New Metadata				 *new-metadata* *:NewMetadata*
+
+	New metadata.xml files will automatically have content placed into
+	them based upon context (for example, the package category). If the
+	environment variable 'ECHANGELOG_USER' is set, it will be used for the
+	author's name and email address.
+
+	The ':NewMetadata' command can be used to manually create contents for
+	a new metadata file.
+
+	Note: metadata.xml files may not be detected automatically. The
+	|:NewMetadata| command will still work in these situations.
+
+vim:tw=78:ts=8:ft=help
